@@ -1,0 +1,329 @@
+openapi: "3.0.0"
+info:
+  title: "Finance API"
+  description: "Manage your finances"
+  version: "1.0.0"
+schemes:
+  - "http"
+produces:
+  - "application/json"
+paths:
+  /test:
+    get:
+      summary: "Test route"
+      tags:
+        - "Test"
+      responses:
+        200:
+          description: "Successful response"
+        500:
+          description: "Internal server error"
+  
+  /data/{uid}:
+    get:
+      summary: "Get user data"
+      tags:
+        - "User"
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          type: string
+          description: user id
+        - name: x-api-key
+          in: header
+          description: 
+          required: true
+          type: string
+      responses:
+        200:
+          description: "Successful response"
+        500:
+          description: "Internal server error"
+  
+  /authenticate:
+    post:
+      summary: "Login to user account"
+      tags:
+        - "User"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              example:
+                username: example
+                password: example
+      responses:
+        200:
+          description: "Successful response"
+        500:
+          description: "Internal server error"
+
+  /addUser:
+    post:
+      summary: "Add a new user"
+      tags:
+        - "User"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                firstname:
+                  type: string
+                lastname:
+                  type: string
+                password:
+                  type: string
+              example:
+                username: example
+                firstname: example
+                lastname: example
+                password: example
+      responses:
+        200:
+          description: "Successful response"
+        500:
+          description: "Internal server error"
+
+  /deleteUser/{uid}:
+    delete:
+      summary: "Delete a user"
+      parameters:
+        - name: x-api-key
+          in: header
+          description: 
+          required: true
+          type: string
+        - name: uid
+          in: path
+          required: true
+          type: string
+      tags:
+        - "User"
+      responses:
+        200:
+          description: "Successful response"
+        500:
+          description: "Internal server error"
+
+  /addCategory/{uid}:
+    post:
+      summary: "Add a new money category"
+      parameters:
+        - name: x-api-key
+          in: header
+          description: 
+          required: true
+          type: string
+        - name: uid
+          in: path
+          required: true
+          type: string
+      tags:
+        - "Category"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                account_name:
+                  type: string
+                weight:
+                  type: float
+              example:
+                account_name: savings
+                weight: 0.10
+      responses:
+        200:
+          description: "Successful response"
+        500:
+          description: "Internal server error"
+
+  /addPayday/{uid}:
+    post:
+      summary: "Add income for a user"
+      parameters:
+        - name: x-api-key
+          in: header
+          description: 
+          required: true
+          type: string
+        - name: uid
+          in: path
+          required: true
+          type: string
+      tags:
+        - "Income"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                amount:
+                  type: float
+              example:
+                description: Paycheck
+                amount: 2692.11
+      responses:
+        200:
+          description: "Successful response"
+        500:
+          description: "Internal server error"
+
+  /addTransaction/{uid}:
+    post:
+      summary: "Add a user transaction"
+      parameters:
+        - name: x-api-key
+          in: header
+          description: 
+          required: true
+          type: string
+        - name: uid
+          in: path
+          required: true
+          type: string
+      tags:
+        - "Transaction"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                account_name:
+                  type: string
+                amount:
+                  type: number
+              examples:
+                application/json:
+                  description: Date night
+                  account_name: Unallocated funds
+                  amount: 22.35
+      responses:
+        200:
+          description: "Successful response"
+        500:
+          description: "Internal server error"
+
+  /deleteCategory/{uid}:
+    delete:
+      summary: "Delete a user category"
+      parameters:
+        - name: x-api-key
+          in: header
+          description: 
+          required: true
+          type: string
+        - name: uid
+          in: path
+          required: true
+          type: string
+        - name: category
+          in: query
+          description: Category to delete
+          type: string
+      tags:
+        - "Category"
+      responses:
+        200:
+          description: "Successful response"
+        500:
+          description: "Internal server error"
+
+  /moveFunds/{uid}:
+    post:
+      summary: "Move money between categories"
+      parameters:
+        - name: x-api-key
+          in: header
+          description: 
+          required: true
+          type: string
+        - name: uid
+          in: path
+          required: true
+          type: string
+      tags:
+        - "Category"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                from:
+                  type: string
+                to:
+                  type: string
+                amount:
+                  type: number
+              examples:
+                application/json:
+                  from: Account 1
+                  to: Account 2
+                  amount: 100
+      responses:
+        200:
+          description: "Successful response"
+        500:
+          description: "Internal server error"
+
+  /addBalance/{uid}:
+    post:
+      summary: "Add money to a specific category"
+      parameters:
+        - name: x-api-key
+          in: header
+          description: 
+          required: true
+          type: string
+        - name: uid
+          in: path
+          required: true
+          type: string
+      tags:
+        - "Income"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                category:
+                  type: string
+                amount:
+                  type: number
+              examples:
+                application/json:
+                  category: Savings
+                  amount: 100
+                  description: Bonus
+      responses:
+        200:
+          description: "Successful response"
+        500:
+          description: "Internal server error"
